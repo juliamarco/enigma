@@ -1,9 +1,9 @@
 # Enigma - Self Assessment
 
-##Functionality - 
+## Functionality - 
 
-##OOP - 
+## OOP - 
 
-##TDD - 
+## TDD - 
 
-##Version Control	=
+## Version Control	-
