@@ -30,10 +30,9 @@ class EnigmaTest < MiniTest::Test
 
   def test_it_can_generate_keys
 
-    number = 02715
+    number = "02715"
     expected = {A: "02", B: "27", C: "71", D: "15"}
-    @enigma.generate_keys(02715)
-
+    @enigma.generate_keys(number)
     assert_equal expected, @enigma.keys
   end
 
