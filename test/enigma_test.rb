@@ -21,11 +21,11 @@ class EnigmaTest < MiniTest::Test
     assert_equal character_set, @enigma.character_set
   end
 
-  def test_it_has_keys
+  def test_it_starts_with_no_keys
 
-    number = 02715
-    expected = {A: 02, B: 27, C: 71, D: 15}
-    assert_equal expected, @enigma.keys
+    # keys = 02715
+    # expected = {A: 02, B: 27, C: 71, D: 15}
+    assert_equal [], @enigma.keys
   end
 
 end
