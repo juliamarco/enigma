@@ -2,12 +2,11 @@ require 'date'
 
 class Enigma
   attr_reader :character_set,
-              :keys,
-              :offsets
+              :shifts
 
   def initialize
     @character_set = ("a".."z").to_a << " "
-    @shift = {A: 0, B: 0, C: 0, D: 0}
+    @shifts = {A: 0, B: 0, C: 0, D: 0}
   end
 
   def generate_keys(number)
