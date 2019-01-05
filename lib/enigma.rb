@@ -6,25 +6,31 @@ class Enigma
 
   def initialize
     @character_set = ("a".."z").to_a << " "
-    @shifts = {A: 0, B: 0, C: 0, D: 0}
+    @keys = {A: 0, B: 0, C: 0, D: 0}
+    @offsets = {A: 0, B: 0, C: 0, D: 0}
+    @shifts = {}
   end
 
   def generate_keys(number)
-    keys = {A: 0, B: 0, C: 0, D: 0}
     number = number.to_s.split("")
-    keys.each do |letter, num|
-      keys[letter] = number.slice(0..1).join
+    @keys.each do |letter, num|
+      @keys[letter] = number.slice(0..1).join
       number.shift
     end
   end
 
   def generate_offsets(date)
-    offsets = {A: 0, B: 0, C: 0, D: 0}
     date = date.to_i
     number = (date * date).to_s[-4..-1].split("")
-    offsets.each do |letter, num|
-      offsets[letter] = number[0]
+    @offsets.each do |letter, num|
+      @offsets[letter] = number[0]
       number.shift
+    end
+  end
+
+  def generate_shifts
+    @shifts = @keys.merge(@offsets) do |letter, keys_num, offsets_num|
+      keys_num.to_i + offsets_num.to_i
     end
   end
 

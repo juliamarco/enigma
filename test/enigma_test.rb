@@ -24,28 +24,30 @@ class EnigmaTest < MiniTest::Test
 
   def test_it_can_generate_keys
 
-    number = "02715"
     expected = {A: "02", B: "27", C: "71", D: "15"}
-    assert_equal expected, @enigma.generate_keys(number)
+    assert_equal expected, @enigma.generate_keys("02715")
   end
 
 
   def test_it_can_generate_offsets
 
-    date = "040895"
     expected = {A: "1", B: "0", C: "2", D: "5"}
-    assert_equal expected, @enigma.generate_offsets(date)
+    assert_equal expected, @enigma.generate_offsets("040895")
   end
 
   def test_it_starts_with_no_shifts
 
-    expected = {A: 0, B: 0, C: 0, D: 0}
+    expected = {}
     assert_equal expected, @enigma.shifts
   end
 
   def test_it_can_generate_shifts
 
+    @enigma.generate_keys("02715")
+    @enigma.generate_offsets("040895")
+
     @enigma.generate_shifts
+
     expected = {A: 3, B: 27, C: 73, D: 20}
     assert_equal expected, @enigma.shifts
   end
