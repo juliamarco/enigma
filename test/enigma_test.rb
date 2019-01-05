@@ -22,33 +22,22 @@ class EnigmaTest < MiniTest::Test
     assert_equal character_set, @enigma.character_set
   end
 
-  def test_it_starts_with_no_keys
-
-    expected = {A: 0, B: 0, C: 0, D: 0}
-    assert_equal expected, @enigma.keys
-  end
-
   def test_it_can_generate_keys
 
     number = "02715"
     expected = {A: "02", B: "27", C: "71", D: "15"}
-    @enigma.generate_keys(number)
-    assert_equal expected, @enigma.keys
+    assert_equal expected, @enigma.generate_keys(number)
   end
 
-  def test_it_starts_with_no_offsets
-
-    expected = {A: 0, B: 0, C: 0, D: 0}
-    assert_equal expected, @enigma.offsets
-  end
 
   def test_it_can_generate_offsets
 
     date = "040895"
     expected = {A: "1", B: "0", C: "2", D: "5"}
-    @enigma.generate_offsets(date)
-    assert_equal expected, @enigma.offsets
+    assert_equal expected, @enigma.generate_offsets(date)
   end
+
+  # def test_it
 
 
 end
