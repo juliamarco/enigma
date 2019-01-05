@@ -1,5 +1,6 @@
 require 'simplecov'
 SimpleCov.start
+require 'pry'
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/enigma'
@@ -23,16 +24,15 @@ class EnigmaTest < MiniTest::Test
 
   def test_it_starts_with_no_keys
 
-    # keys = 02715
-    # expected = {A: 02, B: 27, C: 71, D: 15}
-    assert_equal [], @enigma.keys
+    expected = {A: 0, B: 0, C: 0, D: 0}
+    assert_equal expected, @enigma.keys
   end
 
   def test_it_can_generate_keys
 
     number = 02715
-    expected = {A: 02, B: 27, C: 71, D: 15}
-    @enigma.generate_keys(number)
+    expected = {A: "02", B: "27", C: "71", D: "15"}
+    @enigma.generate_keys(02715)
 
     assert_equal expected, @enigma.keys
   end
