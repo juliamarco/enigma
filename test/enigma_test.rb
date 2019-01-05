@@ -1,6 +1,7 @@
 require 'simplecov'
 SimpleCov.start
 require 'pry'
+require 'date'
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/enigma'
@@ -51,5 +52,12 @@ class EnigmaTest < MiniTest::Test
     expected = {A: 3, B: 27, C: 73, D: 20}
     assert_equal expected, @enigma.shifts
   end
+
+  def test_it_can_encrypt_a_message
+
+    expected = {encryption: "keder ohulw", key: "02715", date: "040895"}
+    assert_equal expected, @enigma.encrypt("hello world", "02715", "040895")
+  end
+
 
 end
