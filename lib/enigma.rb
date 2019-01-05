@@ -74,5 +74,31 @@ class Enigma
     {encryption: encrypted.join, key: keys, date: offsets}
   end
 
+  def decrypt(string, keys, offsets)
+    generate_shifts(keys, offsets)
+    index_hash = creates_hash_with_index_for_each_shift(string)
+    decrypted = string.chars.map.with_index do |char, index|
+      if index_hash[:A].include?(index)
+        index = @character_set.find_index(char)
+        rotated = @character_set.rotate(-@shifts[:A])
+        rotated[index]
+      elsif index_hash[:B].include?(index)
+        index = @character_set.find_index(char)
+        rotated = @character_set.rotate(-@shifts[:B])
+        rotated[index]
+      elsif index_hash[:C].include?(index)
+        index = @character_set.find_index(char)
+        rotated = @character_set.rotate(-@shifts[:C])
+        rotated[index]
+      else index_hash[:D].include?(index)
+        index = @character_set.find_index(char)
+        rotated = @character_set.rotate(-@shifts[:D])
+        rotated[index]
+      end
+    end
+    {decryption: decrypted.join, key: keys, date: offsets}
+  end
+
+
 
 end
