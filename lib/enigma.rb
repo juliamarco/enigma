@@ -26,10 +26,52 @@ class Enigma
     end
   end
 
-  def generate_shifts
+  def generate_shifts(keys, offsets)
+    generate_keys(keys)
+    generate_offsets(offsets)
     @shifts = @keys.merge(@offsets) do |letter, keys_num, offsets_num|
       keys_num.to_i + offsets_num.to_i
     end
+  end
+
+  def creates_hash_with_index_for_each_shift(string)
+    index_hash = { A: [], B: [], C: [], D: [] }
+    first_index = 0
+    all_indexes = (first_index..string.length).to_a
+    index_hash.each do |k,v|
+      all_indexes.each do |num|
+        index_hash[k] << num
+        3.times {all_indexes.shift}
+      end
+      first_index += 1
+      all_indexes = (first_index..string.length).to_a
+    end
+    return index_hash
+  end
+
+  def encrypt(string, keys, offsets)
+    generate_shifts(keys, offsets)
+    index_hash = creates_hash_with_index_for_each_shift(string)
+    encrypted = string.chars.map.with_index do |char, index|
+      if index_hash[:A].include?(index)
+        index = @character_set.find_index(char)
+        rotated = @character_set.rotate(@shifts[:A])
+        rotated[index]
+      elsif index_hash[:B].include?(index)
+        index = @character_set.find_index(char)
+        rotated = @character_set.rotate(@shifts[:B])
+        rotated[index]
+      elsif index_hash[:C].include?(index)
+        index = @character_set.find_index(char)
+        rotated = @character_set.rotate(@shifts[:C])
+        rotated[index]
+      else index_hash[:D].include?(index)
+        index = @character_set.find_index(char)
+        rotated = @character_set.rotate(@shifts[:D])
+        rotated[index]
+      end
+    end
+    {encryption: encrypted.join, key: keys, date: offsets}
   end
 
 

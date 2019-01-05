@@ -1,6 +1,7 @@
 require 'simplecov'
 SimpleCov.start
 require 'pry'
+require 'date'
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/enigma'
@@ -43,13 +44,23 @@ class EnigmaTest < MiniTest::Test
 
   def test_it_can_generate_shifts
 
-    @enigma.generate_keys("02715")
-    @enigma.generate_offsets("040895")
-
-    @enigma.generate_shifts
-
+    @enigma.generate_shifts("02715", "040895")
     expected = {A: 3, B: 27, C: 73, D: 20}
     assert_equal expected, @enigma.shifts
   end
+
+  def test_it_can_create_a_hash_with_index_for_each_shift
+
+    string = "hello world"
+    expected = {:A=>[0, 4, 8], :B=>[1, 5, 9], :C=>[2, 6, 10], :D=>[3, 7, 11]}
+    assert_equal expected, @enigma.creates_hash_with_index_for_each_shift(string)
+  end
+
+  def test_it_can_encrypt_a_message
+
+    expected = {encryption: "keder ohulw", key: "02715", date: "040895"}
+    assert_equal expected, @enigma.encrypt("hello world", "02715", "040895")
+  end
+
 
 end
