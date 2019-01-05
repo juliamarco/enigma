@@ -43,7 +43,11 @@ class EnigmaTest < MiniTest::Test
     assert_equal expected, @enigma.shifts
   end
 
+  def test_it_can_generate_shifts
 
-
+    @enigma.generate_shifts
+    expected = {A: 3, B: 27, C: 73, D: 20}
+    assert_equal expected, @enigma.shifts
+  end
 
 end
