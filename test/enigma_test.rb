@@ -43,5 +43,10 @@ class EnigmaTest < MiniTest::Test
     assert_equal expected, @enigma.offsets
   end
 
+  def test_it_can_get_offsets_number_from_date
+
+    assert_equal 1025, @enigma.offsets_number_from_date
+  end
+
 
 end
