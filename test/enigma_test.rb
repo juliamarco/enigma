@@ -42,10 +42,12 @@ class EnigmaTest < MiniTest::Test
     assert_equal expected, @enigma.offsets
   end
 
-  def test_it_can_get_offsets_number_from_date
+  def test_it_can_generate_offsets
 
     date = "040895"
-    assert_equal {A: 0, B: 0, C: 0, D: 0}, @enigma.offsets_number_from_date(date)
+    expected = {A: "1", B: "0", C: "2", D: "5"}
+    @enigma.generate_offsets(date)
+    assert_equal expected, @enigma.offsets
   end
 
 
