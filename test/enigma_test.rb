@@ -28,4 +28,13 @@ class EnigmaTest < MiniTest::Test
     assert_equal [], @enigma.keys
   end
 
+  def test_it_can_generate_keys
+
+    number = 02715
+    expected = {A: 02, B: 27, C: 71, D: 15}
+    @enigma.generate_keys(number)
+
+    assert_equal expected, @enigma.keys
+  end
+
 end
