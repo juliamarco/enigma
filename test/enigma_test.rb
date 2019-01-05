@@ -44,8 +44,8 @@ class EnigmaTest < MiniTest::Test
 
   def test_it_can_get_offsets_number_from_date
 
-    date = "August 4, 1995"
-    assert_equal 1025, @enigma.offsets_number_from_date(date)
+    date = "040895"
+    assert_equal {A: 0, B: 0, C: 0, D: 0}, @enigma.offsets_number_from_date(date)
   end
 
 
