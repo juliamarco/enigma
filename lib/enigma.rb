@@ -1,3 +1,5 @@
+require 'date'
+
 class Enigma
   attr_reader :character_set,
               :keys,
@@ -11,14 +13,20 @@ class Enigma
 
   def generate_keys(number)
     number = number.to_s.split("")
-    number = ["0", "2", "7", "1", "5"]
     @keys.each do |letter, num|
       @keys[letter] = number.slice(0..1).join
       number.shift
     end
   end
 
-
+  def generate_offsets(date)
+    date = date.to_i
+    number = (date * date).to_s[-4..-1].split("")
+    @offsets.each do |letter, num|
+      @offsets[letter] = number[0]
+      number.shift
+    end
+  end
 
 
 end
