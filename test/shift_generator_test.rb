@@ -25,5 +25,13 @@ class ShiftGeneratorTest < MiniTest::Test
     assert_equal expected, shift_generator.shifts
   end
 
+  def test_it_can_sort_character_shift_by_index
+
+    shift_generator = ShiftGenerator.new
+    string = "hello world"
+    expected = {:A=>[0, 4, 8], :B=>[1, 5, 9], :C=>[2, 6, 10], :D=>[3, 7, 11]}
+    assert_equal expected, shift_generator.sort_char_shift_by_index(string)
+  end
+
 
 end
