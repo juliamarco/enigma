@@ -1,0 +1,3 @@
+class OffsetsGenerator
+
+end
