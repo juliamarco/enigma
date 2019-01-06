@@ -1,52 +1,14 @@
-class Enigma
+require './lib/shift_generator'
+
+class Enigma < ShiftGenerator
   attr_reader :character_set,
               :shifts
 
   def initialize
     @character_set = ("a".."z").to_a << " "
-    @keys = {A: 0, B: 0, C: 0, D: 0}
-    @offsets = {A: 0, B: 0, C: 0, D: 0}
     @shifts = {}
-  end
-
-  def generate_keys(number)
-    number = number.to_s.split("")
-    @keys.each do |letter, num|
-      @keys[letter] = number.slice(0..1).join
-      number.shift
-    end
-  end
-
-  def generate_offsets(date)
-    date = date.to_i
-    number = (date * date).to_s[-4..-1].split("")
-    @offsets.each do |letter, num|
-      @offsets[letter] = number[0]
-      number.shift
-    end
-  end
-
-  def generate_shifts(key, date)
-    generate_keys(key)
-    generate_offsets(date)
-    @shifts = @keys.merge(@offsets) do |letter, keys_num, offsets_num|
-      keys_num.to_i + offsets_num.to_i
-    end
-  end
-
-  def creates_hash_with_index_for_each_shift(string)
-    index_hash = { A: [], B: [], C: [], D: [] }
-    first_index = 0
-    all_indexes = (first_index..string.length).to_a
-    index_hash.each do |k,v|
-      all_indexes.each do |num|
-        index_hash[k] << num
-        3.times {all_indexes.shift}
-      end
-      first_index += 1
-      all_indexes = (first_index..string.length).to_a
-    end
-    return index_hash
+    @encrypted = []
+    @decrypted = []
   end
 
   def todays_date
@@ -62,59 +24,58 @@ class Enigma
   def encrypt(string, key = random_number, date = todays_date)
     string = string.downcase
     generate_shifts(key, date)
-    index_hash = creates_hash_with_index_for_each_shift(string)
-    encrypted = []
+    index_hash = sort_char_shift_by_index(string)
+    encrypt_normal_characters(string, index_hash)
+    ignore_special_characters(string)
+    {encryption: @encrypted.join, key: key, date: date}
+  end
+
+  def encrypt_normal_characters(string, index_hash)
     string.chars.each_with_index do |char, index|
-      if @character_set.include?(char)
-        if index_hash[:A].include?(index)
-          index = @character_set.find_index(char)
-          rotated = @character_set.rotate(@shifts[:A])
-          encrypted << rotated[index]
-        elsif index_hash[:B].include?(index)
-          index = @character_set.find_index(char)
-          rotated = @character_set.rotate(@shifts[:B])
-          encrypted << rotated[index]
-        elsif index_hash[:C].include?(index)
-          index = @character_set.find_index(char)
-          rotated = @character_set.rotate(@shifts[:C])
-          encrypted << rotated[index]
-        else index_hash[:D].include?(index)
-          index = @character_set.find_index(char)
-          rotated = @character_set.rotate(@shifts[:D])
-          encrypted << rotated[index]
+      index_hash.each do |letter, idx|
+        if @character_set.include?(char)
+          if index_hash[letter].include?(index)
+            build_encrypted_message(letter, char)
+          end
         end
-      else
-        encrypted.insert(index, char)
       end
     end
-    {encryption: encrypted.join, key: key, date: date}
+  end
+
+  def build_encrypted_message(letter_shift, char)
+    index = @character_set.find_index(char)
+    rotated = @character_set.rotate(@shifts[letter_shift])
+    @encrypted << rotated[index]
+  end
+
+  def ignore_special_characters(string)
+    string.chars.each_with_index do |char, index|
+      unless @character_set.include?(char)
+        @encrypted.insert(index, char)
+      end
+    end
   end
 
   def decrypt(string, keys, offsets)
     generate_shifts(keys, offsets)
-    index_hash = creates_hash_with_index_for_each_shift(string)
-    decrypted = string.chars.map.with_index do |char, index|
-      if index_hash[:A].include?(index)
-        index = @character_set.find_index(char)
-        rotated = @character_set.rotate(-@shifts[:A])
-        rotated[index]
-      elsif index_hash[:B].include?(index)
-        index = @character_set.find_index(char)
-        rotated = @character_set.rotate(-@shifts[:B])
-        rotated[index]
-      elsif index_hash[:C].include?(index)
-        index = @character_set.find_index(char)
-        rotated = @character_set.rotate(-@shifts[:C])
-        rotated[index]
-      else index_hash[:D].include?(index)
-        index = @character_set.find_index(char)
-        rotated = @character_set.rotate(-@shifts[:D])
-        rotated[index]
+    index_hash = sort_char_shift_by_index(string)
+    string.chars.each_with_index do |char, index|
+      index_hash.each do |letter, idx|
+        if @character_set.include?(char)
+          if index_hash[letter].include?(index)
+            build_decrypted_message(letter, char)
+          end
+        end
       end
     end
-    {decryption: decrypted.join, key: keys, date: offsets}
+    {decryption: @decrypted.join, key: keys, date: offsets}
   end
 
+  def build_decrypted_message(letter_shift, char)
+    index = @character_set.find_index(char)
+    rotated = @character_set.rotate(-@shifts[letter_shift])
+    @decrypted << rotated[index]
+  end
 
 
 end
