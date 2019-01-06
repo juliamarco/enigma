@@ -72,7 +72,7 @@ class EnigmaTest < MiniTest::Test
   def test_it_has_todays_date
 
     enigma = mock
-    stub = enigma.stubs(:todays_date).returns("081819")
+    enigma.expects(:todays_date).returns("081819")
     assert_equal "081819", enigma.todays_date
   end
 
@@ -84,10 +84,18 @@ class EnigmaTest < MiniTest::Test
     assert_equal expected, enigma.encrypt("hello world", "02715")
   end
 
+  def test_it_can_decrypt_a_message_using_todays_date
+
+    expected = {:decryption=>"edhplzssok ", :key=>"02715", :date=>"050119"}
+    enigma = mock
+    enigma.stubs(:decrypt).returns(expected)
+    assert_equal expected, enigma.decrypt("keder ohulw", "02715")
+  end
+
   def test_it_has_a_random_number
 
     enigma = mock
-    enigma.stubs(:random_number).returns("62743")
+    enigma.expects(:random_number).returns("62743")
     assert_equal "62743", enigma.random_number
   end
 
@@ -95,7 +103,9 @@ class EnigmaTest < MiniTest::Test
   def test_it_can_generate_random_key_if_not_given_one
 
     expected = {encryption: "shhazcsdbo ", key: "02715", date: "010519"}
-    assert_equal expected, @enigma.encrypt("hello world")
+    enigma = mock
+    enigma.stubs(:encrypt).returns(expected)
+    assert_equal expected, enigma.encrypt("hello world")
   end
 
 
