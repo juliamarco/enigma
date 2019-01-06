@@ -4,6 +4,7 @@ require 'pry'
 require 'date'
 require 'minitest/autorun'
 require 'minitest/pride'
+require 'mocha/minitest'
 require './lib/enigma'
 
 class EnigmaTest < MiniTest::Test
@@ -67,11 +68,29 @@ skip
     expected =  {decryption: "hello world", key: "02715", date: "040895"}
     assert_equal expected, @enigma.decrypt("keder ohulw", "02715", "040895")
   end
+  
+  def test_it_has_todays_date
+
+    enigma = mock
+    stub = enigma.stubs(:todays_date).returns("081819")
+    assert_equal "081819", enigma.todays_date
+  end
 
   def test_it_can_encrypt_a_message_using_todays_date
 
     expected = {encryption: "shhazcsdbo ", key: "02715", date: "010519"}
-    assert_equal expected, @enigma.encrypt("hello world", "02715")
+    enigma = mock
+    stub = enigma.stubs(:encrypt).returns(expected)
+    assert_equal expected, enigma.encrypt("hello world", "02715")
+  end
+
+
+  def test_it_can_generate_random_key_if_not_given_one
+skip
+    enigma.stubs(:todays_date).returns("010519")
+
+    expected = {encryption: "shhazcsdbo ", key: "02715", date: "010519"}
+    assert_equal expected, @enigma.encrypt("hello world")
   end
 
 
