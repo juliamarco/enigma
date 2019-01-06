@@ -80,13 +80,19 @@ class EnigmaTest < MiniTest::Test
 
     expected = {encryption: "shhazcsdbo ", key: "02715", date: "010519"}
     enigma = mock
-    stub = enigma.stubs(:encrypt).returns(expected)
+    enigma.stubs(:encrypt).returns(expected)
     assert_equal expected, enigma.encrypt("hello world", "02715")
+  end
+
+  def test_it_has_a_random_number
+
+    enigma = mock
+    enigma.stubs(:random_number).returns("62743")
+    assert_equal "62743", enigma.random_number
   end
 
 
   def test_it_can_generate_random_key_if_not_given_one
-    enigma.stubs(:todays_date).returns("010519")
 
     expected = {encryption: "shhazcsdbo ", key: "02715", date: "010519"}
     assert_equal expected, @enigma.encrypt("hello world")
