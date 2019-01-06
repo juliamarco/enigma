@@ -13,6 +13,6 @@ writer = File.open(file_name, "w")
 
 writer.write(encrypted[:encryption])
 
-p "Created '#{file_name}' with the key #{encrypted[:key]} and date #{encrypted[:date]}"
+puts "Created '#{file_name}' with the key #{encrypted[:key]} and date #{encrypted[:date]}"
 
 writer.close
