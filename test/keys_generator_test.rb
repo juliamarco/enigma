@@ -17,4 +17,11 @@ class KeysGeneratorTest < MiniTest::Test
     assert_equal expected, keys.keys
   end
 
+  def test_it_can_generate_keys
+
+    keys = KeysGenerator.new
+    expected = {A: "02", B: "27", C: "71", D: "15"}
+    assert_equal expected, keys.generate_keys("02715")
+  end
+
 end
