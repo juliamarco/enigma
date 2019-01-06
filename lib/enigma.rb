@@ -49,8 +49,18 @@ class Enigma
     return index_hash
   end
 
-  def encrypt(string, key, date = Date.today)
+  def todays_date
+    date = Date.today
     date = date.strftime("%m%d%y")
+  end
+
+  def random_number
+    number = rand(99999).to_s
+    "%05d" % number
+  end
+
+  def encrypt(string, key = random_number, date = todays_date)
+    # binding.pry
     generate_shifts(key, date)
     index_hash = creates_hash_with_index_for_each_shift(string)
     encrypted = string.chars.map.with_index do |char, index|
