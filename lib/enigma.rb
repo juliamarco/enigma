@@ -26,9 +26,9 @@ class Enigma
     end
   end
 
-  def generate_shifts(keys, offsets)
-    generate_keys(keys)
-    generate_offsets(offsets)
+  def generate_shifts(key, date)
+    generate_keys(key)
+    generate_offsets(date)
     @shifts = @keys.merge(@offsets) do |letter, keys_num, offsets_num|
       keys_num.to_i + offsets_num.to_i
     end
@@ -49,29 +49,45 @@ class Enigma
     return index_hash
   end
 
-  def encrypt(string, keys, offsets)
-    generate_shifts(keys, offsets)
+  def todays_date
+    date = Date.today
+    date = date.strftime("%m%d%y")
+  end
+
+  def random_number
+    number = rand(99999).to_s
+    "%05d" % number
+  end
+
+  def encrypt(string, key = random_number, date = todays_date)
+    string = string.downcase
+    generate_shifts(key, date)
     index_hash = creates_hash_with_index_for_each_shift(string)
-    encrypted = string.chars.map.with_index do |char, index|
-      if index_hash[:A].include?(index)
-        index = @character_set.find_index(char)
-        rotated = @character_set.rotate(@shifts[:A])
-        rotated[index]
-      elsif index_hash[:B].include?(index)
-        index = @character_set.find_index(char)
-        rotated = @character_set.rotate(@shifts[:B])
-        rotated[index]
-      elsif index_hash[:C].include?(index)
-        index = @character_set.find_index(char)
-        rotated = @character_set.rotate(@shifts[:C])
-        rotated[index]
-      else index_hash[:D].include?(index)
-        index = @character_set.find_index(char)
-        rotated = @character_set.rotate(@shifts[:D])
-        rotated[index]
+    encrypted = []
+    string.chars.each_with_index do |char, index|
+      if @character_set.include?(char)
+        if index_hash[:A].include?(index)
+          index = @character_set.find_index(char)
+          rotated = @character_set.rotate(@shifts[:A])
+          encrypted << rotated[index]
+        elsif index_hash[:B].include?(index)
+          index = @character_set.find_index(char)
+          rotated = @character_set.rotate(@shifts[:B])
+          encrypted << rotated[index]
+        elsif index_hash[:C].include?(index)
+          index = @character_set.find_index(char)
+          rotated = @character_set.rotate(@shifts[:C])
+          encrypted << rotated[index]
+        else index_hash[:D].include?(index)
+          index = @character_set.find_index(char)
+          rotated = @character_set.rotate(@shifts[:D])
+          encrypted << rotated[index]
+        end
+      else
+        encrypted.insert(index, char)
       end
     end
-    {encryption: encrypted.join, key: keys, date: offsets}
+    {encryption: encrypted.join, key: key, date: date}
   end
 
   def decrypt(string, keys, offsets)
