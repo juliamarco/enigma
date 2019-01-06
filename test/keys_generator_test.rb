@@ -2,9 +2,7 @@ require './lib/keys_generator'
 require 'minitest/autorun'
 require 'minitest/pride'
 
-class KeysGeneratorTest
-
-  KeysGeneratorTest < MiniTest::Test
+class KeysGeneratorTest < MiniTest::Test
 
   def test_it_exists
     keys = KeysGenerator.new
