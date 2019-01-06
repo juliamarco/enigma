@@ -17,4 +17,13 @@ class ShiftGeneratorTest < MiniTest::Test
     assert_equal expected, shift_generator.shifts
   end
 
+  def test_it_can_generate_shifts
+
+    shift_generator = ShiftGenerator.new
+    shift_generator.generate_shifts("02715", "040895")
+    expected = {A: 3, B: 27, C: 73, D: 20}
+    assert_equal expected, shift_generator.shifts
+  end
+
+
 end
