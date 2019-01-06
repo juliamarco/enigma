@@ -10,8 +10,9 @@ encrypted = enigma.encrypt(message)
 
 file_name = ARGV[1]
 writer = File.open(file_name, "w")
-writer.write(encrypted)
 
-p "File: #{file_name}, key: #{encrypted[:key]}, date: #{encrypted[:date]}"
+writer.write(encrypted[:encryption])
+
+p "Created '#{file_name}' with the key #{encrypted[:key]} and date #{encrypted[:date]}"
 
 writer.close
