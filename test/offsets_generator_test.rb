@@ -17,4 +17,12 @@ class OffsetsGeneratorTest < MiniTest::Test
     assert_equal expected, offsets.offsets
   end
 
+  def test_it_can_generate_offsets
+
+    offsets = OffsetsGenerator.new
+    expected = {A: "1", B: "0", C: "2", D: "5"}
+    assert_equal expected, offsets.generate_offsets("040895")
+  end
+
+
 end
