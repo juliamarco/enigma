@@ -2,8 +2,7 @@ require './lib/keys_generator'
 require './lib/offsets_generator'
 require 'pry'
 
-
- class ShiftGenerator
+class ShiftGenerator
   attr_reader :shifts
 
   def initialize
