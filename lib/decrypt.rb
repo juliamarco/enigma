@@ -1,4 +1,4 @@
-require './enigma.rb'
+require './lib/enigma'
 require 'date'
 
 handle = File.open(ARGV[0], "r")
