@@ -6,7 +6,6 @@ class Enigma < ShiftGenerator
 
   def initialize
     @character_set = ("a".."z").to_a << " "
-    @shifts = {}
     @encrypted = []
     @decrypted = []
   end
@@ -17,11 +16,10 @@ class Enigma < ShiftGenerator
   end
 
   def random_number
-    number = rand(99999).to_s
-    "%05d" % number
+    number = rand(99999)
   end
 
-  def encrypt(string, key = random_number, date = todays_date)
+  def encrypt(string, key = "%05d" % random_number.to_s, date = todays_date)
     string = string.downcase
     generate_shifts(key, date)
     index_hash = sort_char_shift_by_index(string)
@@ -56,7 +54,7 @@ class Enigma < ShiftGenerator
     end
   end
 
-  def decrypt(string, keys, offsets)
+  def decrypt(string, keys, offsets = todays_date)
     generate_shifts(keys, offsets)
     index_hash = sort_char_shift_by_index(string)
     string.chars.each_with_index do |char, index|
