@@ -6,7 +6,8 @@ message = handle.read.chop
 handle.close
 
 enigma = Enigma.new
-encrypted = enigma.encrypt(message,"82648", "240818")
+
+encrypted = enigma.encrypt(message, "00099", "240818")
 
 file_name = ARGV[1]
 writer = File.open(file_name, "w")
