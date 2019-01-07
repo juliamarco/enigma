@@ -81,7 +81,7 @@ class Enigma < ShiftGenerator
     end
   end
 
-  def crack(encrypted_message, date)
+  def crack(encrypted_message, date = todays_date)
     possible_keys = find_possible_keys
     cracked_key = possible_keys.find do |possible_key|
       decrypted = decrypt(encrypted_message, possible_key, date)
@@ -90,9 +90,5 @@ class Enigma < ShiftGenerator
     @decrypted = []
     decrypt(encrypted_message, cracked_key, date)
   end
-
-
-
-
 
 end
