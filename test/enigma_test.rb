@@ -64,7 +64,6 @@ class EnigmaTest < MiniTest::Test
     assert_equal num.between?(0,99999), true
   end
 
-
   def test_it_can_generate_random_key_if_not_given_one
 
     expected = {encryption: "shhazcsdbo ", key: "02715", date: "010519"}
@@ -74,10 +73,18 @@ class EnigmaTest < MiniTest::Test
   end
 
   def test_it_can_crack_an_encryption_with_a_date
-    encrypted = @enigma.encrypt("hello world end", "08304", "291018")
+    encrypted = @enigma.encrypt("hello world end", "00304", "291018")
 
-    expected = {decryption: "hello world end", date: "291018", key: "08304"}
+    expected = {decryption: "hello world end", date: "291018", key: "00304"}
     assert_equal expected, @enigma.crack(encrypted[:encryption],encrypted[:date])
+  end
+
+  def test_it_can_crack_an_encryption_using_todays_date
+
+    encrypted = @enigma.encrypt("hello world end", "00304")
+
+    expected = {decryption: "hello world end", key: "00304", date: "010719"}
+    assert_equal expected, @enigma.crack(encrypted[:encryption])
   end
 
 
