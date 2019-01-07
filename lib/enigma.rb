@@ -75,5 +75,24 @@ class Enigma < ShiftGenerator
     @decrypted << rotated[index]
   end
 
+  def find_possible_keys
+    (0..99999).to_a.map do |num|
+      "%05d" % num.to_s
+    end
+  end
+
+  def crack(encrypted_message, date)
+    possible_keys = find_possible_keys
+    cracked_key = possible_keys.find do |possible_key|
+      decrypted = decrypt(encrypted_message, possible_key, date)
+      decrypted[:decryption][-4..-1] == " end"
+    end
+    @decrypted = []
+    decrypt(encrypted_message, cracked_key, date)
+  end
+
+
+
+
 
 end
