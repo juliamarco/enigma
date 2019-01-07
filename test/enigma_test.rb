@@ -53,7 +53,9 @@ class EnigmaTest < MiniTest::Test
   def test_it_can_decrypt_a_message_using_todays_date
 
     expected = {:decryption=>"fdhpmzsspk ", :key=>"02715", :date=>"010619"}
-    assert_equal expected, @enigma.decrypt("keder ohulw", "02715")
+    enigma = mock
+    enigma.stubs(:decrypt).returns(expected)
+    assert_equal expected, enigma.decrypt("keder ohulw", "02715")
   end
 
   def test_it_has_a_random_number
@@ -69,6 +71,13 @@ class EnigmaTest < MiniTest::Test
     enigma = mock
     enigma.stubs(:encrypt).returns(expected)
     assert_equal expected, enigma.encrypt("hello world")
+  end
+
+  def test_it_can_crack_an_encryption_with_a_date
+    encrypted = @enigma.encrypt("hello world end", "08304", "291018")
+
+    expected = {decryption: "hello world end", date: "291018", key: "08304"}
+    assert_equal expected, @enigma.crack(encrypted[:encryption],encrypted[:date])
   end
 
 
