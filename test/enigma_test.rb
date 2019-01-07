@@ -81,11 +81,10 @@ class EnigmaTest < MiniTest::Test
 
   def test_it_can_crack_an_encryption_using_todays_date
 
-    encrypted = @enigma.encrypt("hello world end", "00304")
-
     expected = {decryption: "hello world end", key: "00304", date: "010719"}
-    assert_equal expected, @enigma.crack(encrypted[:encryption])
+    enigma = mock
+    enigma.stubs(:crack).returns(expected)
+    assert_equal expected, enigma.crack("hello world end")
   end
-
 
 end
