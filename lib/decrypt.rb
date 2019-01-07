@@ -1,7 +1,6 @@
 require './enigma.rb'
 require 'date'
 
-
 handle = File.open(ARGV[0], "r")
 encrypted = handle.read
 handle.close
