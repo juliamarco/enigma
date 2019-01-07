@@ -1,6 +1,6 @@
 # Enigma - Self Assessment
 
-## Functionality -  3
+## Functionality -  4
 
 ## OOP - 3
 
