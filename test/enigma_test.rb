@@ -5,6 +5,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'mocha/minitest'
 require './lib/enigma'
+require './lib/keys_generator'
 
 class EnigmaTest < MiniTest::Test
 
@@ -35,26 +36,13 @@ class EnigmaTest < MiniTest::Test
     assert_equal expected, @enigma.decrypt("keder ohulw", "02715", "040895")
   end
 
-  def test_it_has_todays_date
-
-    todays_date = Date.today.strftime("%m%d%y")
-    assert_equal todays_date, @enigma.todays_date
-  end
-
-  def test_it_has_a_random_number
-
-    num = @enigma.random_number
-    nums = @enigma.find_possible_keys
-    assert nums.include?(num)
-  end
-
   def test_it_can_encrypt_a_message_using_todays_date
 
     expected = {encryption: "shhazcsdbo ", key: "02715", date: "010519"}
 
     @enigma.stubs(:todays_date).returns("010519")
-    @enigma.stubs(:random_number).returns("02715")
-    assert_equal expected, @enigma.encrypt("hello world")
+
+    assert_equal expected, @enigma.encrypt("hello world", "02715")
   end
 
   def test_it_can_encrypt_normal_characters
