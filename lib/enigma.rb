@@ -1,13 +1,11 @@
 require './lib/shift_generator'
+require 'date'
 
 class Enigma < ShiftGenerator
-  attr_reader :character_set,
-              :shifts
+  attr_reader :character_set
 
   def initialize
     @character_set = ("a".."z").to_a << " "
-    @encrypted = []
-    @decrypted = []
   end
 
   def todays_date
@@ -17,62 +15,67 @@ class Enigma < ShiftGenerator
 
   def random_number
     number = rand(99999)
+    "%05d" % number.to_s
   end
 
-  def encrypt(string, key = "%05d" % random_number.to_s, date = todays_date)
+  def encrypt(string, key = random_number, date = todays_date)
     string = string.downcase
     generate_shifts(key, date)
+    encrypted = []
     index_hash = sort_char_shift_by_index(string)
-    encrypt_normal_characters(string, index_hash)
-    ignore_special_characters(string)
-    {encryption: @encrypted.join, key: key, date: date}
+    encrypted = encrypt_normal_characters(string, index_hash, encrypted)
+    encrypted = ignore_special_characters(string, encrypted)
+    {encryption: encrypted.join, key: key, date: date}
   end
 
-  def encrypt_normal_characters(string, index_hash)
+  def encrypt_normal_characters(string, index_hash, encrypted)
     string.chars.each_with_index do |char, index|
       index_hash.each do |letter, idx|
         if @character_set.include?(char)
           if index_hash[letter].include?(index)
-            build_encrypted_message(letter, char)
+            encrypted = build_encrypted_message(letter, char, encrypted)
           end
         end
       end
     end
+    return encrypted
   end
 
-  def build_encrypted_message(letter_shift, char)
+  def build_encrypted_message(letter_shift, char, encrypted)
     index = @character_set.find_index(char)
     rotated = @character_set.rotate(@shifts[letter_shift])
-    @encrypted << rotated[index]
+    encrypted << rotated[index]
   end
 
-  def ignore_special_characters(string)
+  def ignore_special_characters(string, encrypted)
     string.chars.each_with_index do |char, index|
       unless @character_set.include?(char)
-        @encrypted.insert(index, char)
+        encrypted.insert(index, char)
       end
-    end
+    end.join
+    return encrypted
   end
 
   def decrypt(string, keys, offsets = todays_date)
+    decrypted = []
     generate_shifts(keys, offsets)
     index_hash = sort_char_shift_by_index(string)
     string.chars.each_with_index do |char, index|
       index_hash.each do |letter, idx|
         if @character_set.include?(char)
           if index_hash[letter].include?(index)
-            build_decrypted_message(letter, char)
+            build_decrypted_message(letter, char, decrypted)
           end
         end
       end
     end
-    {decryption: @decrypted.join, key: keys, date: offsets}
+    {decryption: decrypted.join, key: keys, date: offsets}
   end
 
-  def build_decrypted_message(letter_shift, char)
+  def build_decrypted_message(letter_shift, char, decrypted)
     index = @character_set.find_index(char)
     rotated = @character_set.rotate(-@shifts[letter_shift])
-    @decrypted << rotated[index]
+    decrypted << rotated[index]
   end
 
   def find_possible_keys
@@ -87,7 +90,7 @@ class Enigma < ShiftGenerator
       decrypted = decrypt(encrypted_message, possible_key, date)
       decrypted[:decryption][-4..-1] == " end"
     end
-    @decrypted = []
+    decrypted = []
     decrypt(encrypted_message, cracked_key, date)
   end
 
