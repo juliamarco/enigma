@@ -9,8 +9,9 @@ class ShiftGenerator
     @shifts = {}
   end
 
-  def generate_shifts(key, date)
-    keys = KeysGenerator.new(key)
+  def generate_shifts(number, date)
+    keys = KeysGenerator.new(number)
+    keys.generate_keys(number)
     offsets = OffsetsGenerator.new(date)
     @shifts = keys.keys.merge(offsets.offsets) do |letter, keys_num, offsets_num|
       keys_num.to_i + offsets_num.to_i

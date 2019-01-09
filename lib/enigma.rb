@@ -8,17 +8,7 @@ class Enigma < ShiftGenerator
     @character_set = ("a".."z").to_a << " "
   end
 
-  def todays_date
-    date = Date.today
-    date = date.strftime("%m%d%y")
-  end
-
-  def random_number
-    number = rand(99999)
-    "%05d" % number.to_s
-  end
-
-  def encrypt(string, key = random_number, date = todays_date)
+  def encrypt(string, key = 0, date = todays_date)
     string = string.downcase
     generate_shifts(key, date)
     encrypted = []
